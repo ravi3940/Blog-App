@@ -1,16 +1,25 @@
 import express from "express"
-import dbConnection from "./config/dbconnection.js"
 import dotenv from "dotenv"
+import  cookieParser  from  "cookie-parser"
+import cors  from   "cors"
+import dbConnection from "./config/dbconnection.js"
+import authRoutes from './routes/auth.route.js';
+
 dotenv.config({})
-const appp = express()
-const PORT = process.env.PORT || 4000
-appp.use("/", (req, res) => {
+const app = express()
+const PORT = process.env.PORT || 4000 ;
+app.use(express.json());
+app.use(cookieParser());
+app.use(
+  cors({
+    origin: "*", 
+    credentials: true, 
+  })
+);
 
-    res.send("this  is  home  page")
+app.use('/api/auth', authRoutes);
 
-})
-
-appp.listen(PORT, () => {
+app.listen(PORT, () => {
     dbConnection()
     console.log(`srerver  is  run  at  this port  ${PORT}`)
 })
